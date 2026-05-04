@@ -1,4 +1,8 @@
-# Berlin Wall Mod for Luanti/Minetest
+# Berlin Wall Mod for Luanti/Minetest (Art Project)
+
+> **Note:** This mod is intended primarily as an **art project** to recreate historical architecture in Luanti/Minetest. It focuses on architectural accuracy of the Grenzmauer 75 design rather than gameplay mechanics.
+
+![Berlin Wall Screenshot](screenshot-berlin-wall.png)
 
 This mod adds blocks representing parts of the Berlin Wall, specifically the **Grenzmauer 75** (Border Wall 75) generation.
 
@@ -45,3 +49,7 @@ Once enabled, the blocks will be available in the creative inventory under the "
 
 - Textures provided by user
 - Code generated with AI assistance
+
+## Related Mods
+
+- **Barbed Wire**: The specific barbed wire texture shown in the screenshot is from a separate mod by the same author.
