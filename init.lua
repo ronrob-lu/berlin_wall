@@ -28,6 +28,7 @@ minetest.register_node("berlin_wall:fence_site", {
     is_ground_content = false,
     groups = {cracky = 3, fence = 1},
     sounds = stone_sounds,
+    use_texture_alpha = "clip",
 })
 
 -- Grenzmauer 75 Top Block (semi-circular concrete pipe top)
@@ -45,6 +46,7 @@ minetest.register_node("berlin_wall:grenzmauer_top", {
     is_ground_content = false,
     groups = {cracky = 3},
     sounds = stone_sounds,
+    use_texture_alpha = "clip",
 })
 
 -- Standard Wall Block (normal stone block on all sides)
