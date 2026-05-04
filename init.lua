@@ -3,6 +3,14 @@
 
 local modname = "berlin_wall"
 
+-- Define stone sounds safely (compatible with all versions)
+local stone_sounds = {
+    footstep = {name = "default_node_footstep", gain = 0.5},
+    dig = {name = "default_node_dig", gain = 0.6},
+    dug = {name = "default_node_dug", gain = 0.8},
+    place = {name = "default_node_place", gain = 1.0},
+}
+
 -- Search Light Block (emits light with light density 10)
 minetest.register_node("berlin_wall:search_light", {
     description = "Search Light",
@@ -10,7 +18,7 @@ minetest.register_node("berlin_wall:search_light", {
     is_ground_content = false,
     light_source = 10,
     groups = {cracky = 3, not_in_creative_inventory = 0},
-    sounds = minetest.node_sound_stone_defaults(),
+    sounds = stone_sounds,
 })
 
 -- Fence Site Block (for tower tops)
@@ -19,7 +27,7 @@ minetest.register_node("berlin_wall:fence_site", {
     tiles = {"fence-site.png"},
     is_ground_content = false,
     groups = {cracky = 3, fence = 1},
-    sounds = minetest.node_sound_stone_defaults(),
+    sounds = stone_sounds,
 })
 
 -- Grenzmauer 75 Top Block (semi-circular concrete pipe top)
@@ -36,7 +44,7 @@ minetest.register_node("berlin_wall:grenzmauer_top", {
     },
     is_ground_content = false,
     groups = {cracky = 3},
-    sounds = minetest.node_sound_stone_defaults(),
+    sounds = stone_sounds,
 })
 
 -- Standard Wall Block (normal stone block on all sides)
@@ -45,5 +53,5 @@ minetest.register_node("berlin_wall:wall_block", {
     tiles = {"wall-block-front-and-back.png"},
     is_ground_content = false,
     groups = {cracky = 3},
-    sounds = minetest.node_sound_stone_defaults(),
+    sounds = stone_sounds,
 })
