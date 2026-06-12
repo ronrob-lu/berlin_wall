@@ -47,6 +47,7 @@ minetest.register_node("berlin_wall:grenzmauer_top", {
     groups = {cracky = 3},
     sounds = stone_sounds,
     use_texture_alpha = "clip",
+    paramtype2 = "facedir",
 })
 
 -- Standard Wall Block (normal stone block on all sides)
