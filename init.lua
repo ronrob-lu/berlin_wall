@@ -48,6 +48,45 @@ minetest.register_node("berlin_wall:grenzmauer_top", {
     sounds = stone_sounds,
     use_texture_alpha = "clip",
     paramtype2 = "facedir",
+    on_place = function(itemstack, placer, pointed_thing)
+        local node_under = minetest.get_node_or_nil(pointed_thing.under)
+        if not node_under then
+            return itemstack
+        end
+        
+        -- Get the direction the player is facing
+        local dir = placer:get_look_dir()
+        local yaw = math.deg(math.atan2(dir.x, -dir.z))
+        
+        -- Only allow north/south orientation (round side faces north or south)
+        -- This means the flat sides face east/west
+        local facedir = 0
+        if yaw >= -45 and yaw < 45 then
+            facedir = 0  -- North
+        elseif yaw >= 135 or yaw < -135 then
+            facedir = 2  -- South
+        else
+            -- For east/west viewing angles, still place in north/south orientation
+            -- The round top will be perpendicular to player view
+            if yaw >= 45 and yaw < 135 then
+                facedir = 0  -- Place as north when looking east
+            else
+                facedir = 2  -- Place as south when looking west
+            end
+        end
+        
+        local pos = pointed_thing.above
+        local node = {name = "berlin_wall:grenzmauer_top", param2 = facedir}
+        
+        if minetest.setting_getbool("creative_mode") then
+            minetest.set_node(pos, node)
+        else
+            minetest.set_node(pos, node)
+            itemstack:take_item(1)
+        end
+        
+        return itemstack
+    end,
 })
 
 -- Standard Wall Block (normal stone block on all sides)
