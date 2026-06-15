@@ -58,22 +58,15 @@ minetest.register_node("berlin_wall:grenzmauer_top", {
         local dir = placer:get_look_dir()
         local yaw = math.deg(math.atan2(dir.x, -dir.z))
         
-        -- Only allow north/south orientation (round side faces north or south)
-        -- This means the flat sides face east/west
-        local facedir = 0
-        if yaw >= -45 and yaw < 45 then
-            facedir = 0  -- North
-        elseif yaw >= 135 or yaw < -135 then
-            facedir = 2  -- South
-        else
-            -- For east/west viewing angles, still place in north/south orientation
-            -- The round top will be perpendicular to player view
-            if yaw >= 45 and yaw < 135 then
-                facedir = 0  -- Place as north when looking east
-            else
-                facedir = 2  -- Place as south when looking west
-            end
+        -- Normalize yaw to 0-360 range
+        if yaw < 0 then
+            yaw = yaw + 360
         end
+        
+        -- Restrict to 4 cardinal directions only (N, E, S, W)
+        -- This ensures the round top can only face cardinal directions
+        -- facedir 0 = North, 1 = East, 2 = South, 3 = West
+        local facedir = math.floor((yaw + 45) / 90) % 4
         
         local pos = pointed_thing.above
         local node = {name = "berlin_wall:grenzmauer_top", param2 = facedir}
