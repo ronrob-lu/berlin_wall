@@ -50,7 +50,6 @@ minetest.register_node("berlin_wall:grenzmauer_top", {
     sounds = stone_sounds,
     use_texture_alpha = "clip",
     paramtype2 = "facedir",
-    stack_max = 99,
     on_place = function(itemstack, placer, pointed_thing)
         local node_under = minetest.get_node_or_nil(pointed_thing.under)
         if not node_under then
@@ -97,6 +96,44 @@ minetest.register_node("berlin_wall:grenzmauer_top", {
         end
         
         return itemstack
+    end,
+    on_rotate = function(pos, node, user, mode)
+        local current_param2 = node.param2
+        local dir = user:get_look_dir()
+        local yaw = math.deg(math.atan2(dir.x, -dir.z))
+        
+        -- Normalize yaw to 0-360 range
+        if yaw < 0 then
+            yaw = yaw + 360
+        end
+        
+        -- Determine which of the 2 allowed orientations to use based on player facing
+        local new_facedir
+        if (yaw >= 315 or yaw < 45) or (yaw >= 135 and yaw < 225) then
+            -- Player facing N/S - use N/S orientation
+            -- Keep the closest N/S orientation (0 or 2)
+            if current_param2 == 0 or current_param2 == 2 then
+                new_facedir = current_param2  -- Already N/S, keep it
+            elseif yaw >= 315 or yaw < 45 then
+                new_facedir = 0  -- Switch to North
+            else
+                new_facedir = 2  -- Switch to South
+            end
+        else
+            -- Player facing E/W - use E/W orientation
+            -- Keep the closest E/W orientation (1 or 3)
+            if current_param2 == 1 or current_param2 == 3 then
+                new_facedir = current_param2  -- Already E/W, keep it
+            elseif yaw >= 45 and yaw < 135 then
+                new_facedir = 1  -- Switch to East
+            else
+                new_facedir = 3  -- Switch to West
+            end
+        end
+        
+        node.param2 = new_facedir
+        minetest.set_node(pos, node)
+        return true
     end,
 })
 
