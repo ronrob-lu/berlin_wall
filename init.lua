@@ -19,6 +19,7 @@ minetest.register_node("berlin_wall:search_light", {
     light_source = 10,
     groups = {cracky = 3, not_in_creative_inventory = 0},
     sounds = stone_sounds,
+    stack_max = 99,
 })
 
 -- Fence Site Block (for tower tops)
@@ -29,6 +30,7 @@ minetest.register_node("berlin_wall:fence_site", {
     groups = {cracky = 3, fence = 1},
     sounds = stone_sounds,
     use_texture_alpha = "clip",
+    stack_max = 99,
 })
 
 -- Grenzmauer 75 Top Block (semi-circular concrete pipe top)
@@ -48,6 +50,7 @@ minetest.register_node("berlin_wall:grenzmauer_top", {
     sounds = stone_sounds,
     use_texture_alpha = "clip",
     paramtype2 = "facedir",
+    stack_max = 99,
     on_place = function(itemstack, placer, pointed_thing)
         local node_under = minetest.get_node_or_nil(pointed_thing.under)
         if not node_under then
@@ -63,10 +66,25 @@ minetest.register_node("berlin_wall:grenzmauer_top", {
             yaw = yaw + 360
         end
         
-        -- Restrict to 4 cardinal directions only (N, E, S, W)
-        -- This ensures the round top can only face cardinal directions
-        -- facedir 0 = North, 1 = East, 2 = South, 3 = West
-        local facedir = math.floor((yaw + 45) / 90) % 4
+        -- Restrict to 2 horizontal directions only (N/S or E/W)
+        -- If player faces roughly N/S (yaw < 45 or > 315, or between 135-225), place N/S (facedir 0 or 2)
+        -- If player faces roughly E/W (yaw between 45-135 or 225-315), place E/W (facedir 1 or 3)
+        local facedir
+        if (yaw >= 315 or yaw < 45) or (yaw >= 135 and yaw < 225) then
+            -- North/South direction
+            if yaw >= 315 or yaw < 45 then
+                facedir = 0  -- North
+            else
+                facedir = 2  -- South
+            end
+        else
+            -- East/West direction
+            if yaw >= 45 and yaw < 135 then
+                facedir = 1  -- East
+            else
+                facedir = 3  -- West
+            end
+        end
         
         local pos = pointed_thing.above
         local node = {name = "berlin_wall:grenzmauer_top", param2 = facedir}
@@ -89,4 +107,5 @@ minetest.register_node("berlin_wall:wall_block", {
     is_ground_content = false,
     groups = {cracky = 3},
     sounds = stone_sounds,
+    stack_max = 99,
 })
